@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+
+import Sidebar from "./components/Sidebar";
+import { Layout, Side } from "./App.styles";
+import AuthPage from "./pages/AuthPage";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  /**
+   * Auth state is a ternary state
+   * null: not logged in
+   * undefined: unknown state (for loader)
+   * anything else is the user data
+   */
+  const [authState, setAuthState] = useState(undefined);
+
+  // return (
+  //   <Layout>
+  //     <Side>
+  //       <Sidebar />
+  //     </Side>
+  //   </Layout>
+  // );
+
+  return <AuthPage />;
 }
 
 export default App;

@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg-primary: #1b1d20;
+  --neumorphism-outer: -4px -4px 8px #27292d, 4px 4px 8px #070809;
+  --neumorphism-inner: inset -4px -4px 8px #27292d, inset 4px 4px 8px #070809;
+  --gradient-bg: linear-gradient(to bottom, #292e37, #0a0b0d);
+  --color-btn: #b6f2cf;
+}
+
+html {
+  font-family: "Sulphur Point", sans-serif;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  color: white;
+}
+
+.neumorphism-outer {
+  box-shadow: var(--neumorphism-outer);
+}
+
+.neumorphism-inner {
+  box-shadow: var(--neumorphism-inner);
+}
