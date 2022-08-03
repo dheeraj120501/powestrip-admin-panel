@@ -3,15 +3,38 @@ import tw from "tailwind-styled-components";
 export const Main = tw.div`
     w-full
     h-screen
-    bg-[image:var(--gradient-bg)]
     flex
     flex-col
-    justify-center
+    p-16
+`;
+
+export const Logo = tw.div`
+    w-[14%]
+    object-contain
+`;
+
+export const Login = tw.div`
+    mt-20
+    flex
+    justify-between
     items-center
 `;
 
+export const Illustrations = tw.div`
+    flex
+    flex-col
+    items-center
+    justify-center
+    px-20
+`;
+
+export const IllustrationsContent = tw.div`
+    mt-6
+    font-bold
+    text-3xl
+`;
+
 export const Form = tw.form`
-    w-4/12
     p-12
     bg-[color:var(--color-bg-primary)]
     neumorphism-outer
@@ -21,7 +44,7 @@ export const Form = tw.form`
 export const FormCaption = tw.div`
    text-center
    mb-12
-   text-2xl
+   text-3xl
    font-bold
 `;
 
@@ -42,27 +65,28 @@ export const FormAction = tw.div`
     items-center
 `;
 
-const Btn = tw.div`
+const Btn = tw.button`
     px-8
     py-2
     rounded-lg
     mt-8
     border-2
+    border-[color:var(--color-btn)]
     font-bold
+    outline-none
     hover:cursor-pointer
 `;
 
 export const PrimaryBtn = tw(Btn)`
     bg-[color:var(--color-btn)]
+    w-full
     text-black
     hover:bg-transparent
-    hover:border-[color:var(--color-btn)]
     hover:text-[color:var(--color-btn)]
 `;
 
 export const SecondaryBtn = tw(Btn)`
     bg-transparent
-    border-[color:var(--color-btn)]
     text-[color:var(--color-btn)]
     hover:bg-[color:var(--color-btn)]
     hover:text-black

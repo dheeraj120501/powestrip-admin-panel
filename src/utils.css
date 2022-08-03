@@ -1,0 +1,19 @@
+.neumorphism-outer {
+  box-shadow: var(--neumorphism-outer);
+}
+
+.neumorphism-inner {
+  box-shadow: var(--neumorphism-inner);
+}
+
+.anim-delay-1 {
+  animation-delay: 0.1s;
+}
+
+.anim-delay-2 {
+  animation-delay: 0.2s;
+}
+
+.anim-delay-3 {
+  animation-delay: 0.3s;
+}

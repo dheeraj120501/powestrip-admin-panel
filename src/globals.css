@@ -8,6 +8,8 @@
   --neumorphism-inner: inset -4px -4px 8px #27292d, inset 4px 4px 8px #070809;
   --gradient-bg: linear-gradient(to bottom, #292e37, #0a0b0d);
   --color-btn: #b6f2cf;
+  --color-bg-input: #202328;
+  --color-secondary: #1fa7fe;
 }
 
 html {
@@ -19,12 +21,13 @@ body {
   width: 100vw;
   overflow: hidden;
   color: white;
+  background: var(--gradient-bg);
 }
 
-.neumorphism-outer {
-  box-shadow: var(--neumorphism-outer);
+.highlight {
+  stroke: inherit;
 }
 
-.neumorphism-inner {
-  box-shadow: var(--neumorphism-inner);
-}
+/* .highlight:hover {
+  stroke: inherit;
+} */
