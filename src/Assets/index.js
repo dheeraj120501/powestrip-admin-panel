@@ -12,7 +12,7 @@ import { ReactComponent as settings } from "./settings.svg";
 import { ReactComponent as loginScreenAccessible } from "./login-screen-accessible.svg";
 import { ReactComponent as loginScreenAnalysis } from "./login-screen-analysis.svg";
 
-const assets = {
+const Assets = {
   reload,
   notifications,
   settings,
@@ -28,4 +28,4 @@ const assets = {
   loginScreenAnalysis,
 };
 
-export default assets;
+export default Assets;

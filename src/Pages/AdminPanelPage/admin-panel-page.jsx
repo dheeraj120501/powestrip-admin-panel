@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { toast } from "react-hot-toast";
+import { Routes, Route } from "react-router-dom";
 
-import components from "Components";
+import Components from "Components";
 import * as styles from "./admin-panel-page.styles";
+import components from "./components";
 
 function AdminPanelPage({ setAuthState }) {
   useEffect(() => {
@@ -11,9 +13,19 @@ function AdminPanelPage({ setAuthState }) {
 
   return (
     <styles.Layout>
-      <components.Sidebar setAuthState={setAuthState} />
+      <Components.Sidebar setAuthState={setAuthState} />
       <styles.Main>
-        <components.Navbar />
+        <Components.Navbar />
+        <styles.MainContent>
+          <Routes>
+            <Route path="/" exact element={<components.Dashboard />}></Route>
+            <Route path="/devices" element={<components.Devices />}></Route>
+            <Route
+              path="/add-device"
+              element={<components.AddDevice />}
+            ></Route>
+          </Routes>
+        </styles.MainContent>
       </styles.Main>
     </styles.Layout>
   );

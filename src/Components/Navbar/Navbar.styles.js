@@ -1,6 +1,7 @@
 import tw from "tailwind-styled-components";
 
 export const Main = tw.div`
+    px-6
     flex
     justify-between
 `;

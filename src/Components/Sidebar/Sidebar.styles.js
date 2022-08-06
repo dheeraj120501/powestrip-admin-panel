@@ -1,13 +1,15 @@
 import tw from "tailwind-styled-components";
 
+// TODO: Keep in mind things break because of max width small
 export const Main = tw.div`
     px-12
     py-8
     h-screen
-    inline-flex
+    flex
     flex-col
     justify-between
     items-center
+    max-w-xs
     bg-[color:var(--color-bg-primary)]
 `;
 
@@ -28,8 +30,8 @@ export const BtnIcon = tw.div`
     h-full
     flex
     bg-[color:#1fa7fe]
-    rounded-[50%]
-    px-1.5
+    rounded-full
+    p-1
     justify-center
     items-center
     mr-2
@@ -39,13 +41,13 @@ export const Avatar = tw.div`
     w-full
     flex
     justify-center
-    object-contain
+    object-cover
 `;
 
 export const Card = tw.div`
     neumorphism-outer
     w-full
-    
+    mt-16
     flex
     flex-col
     items-center
@@ -63,10 +65,6 @@ export const CardImg = tw.div`
     rounded-[50%]
     overflow-hidden
     mb-[-20px]
-`;
-
-export const Spacer = tw.div`
-    flex-1
 `;
 
 export const CardHeading = tw.div`
@@ -100,6 +98,8 @@ export const ListView = tw.div`
     flex    
     flex-col
     items-stretch
+    overflow-auto
+    flex-1
 `;
 
 export const ListTile = tw.div`

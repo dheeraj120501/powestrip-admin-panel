@@ -14,7 +14,7 @@ export const Logo = tw.div`
 `;
 
 export const Login = tw.div`
-    mt-20
+    mt-16
     flex
     justify-between
     items-center

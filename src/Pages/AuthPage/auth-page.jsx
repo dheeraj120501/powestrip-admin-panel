@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import * as styles from "./auth-page.styles";
 import assets from "Assets";
+import components from "./components";
 
 function AuthPage({ setAuthState }) {
   const logIn = async (e) => {
@@ -37,18 +38,20 @@ function AuthPage({ setAuthState }) {
         <assets.brandLogo />
       </styles.Logo>
       <styles.Login>
-        <styles.Illustrations>
-          <assets.loginScreenAnalysis />
-          <styles.IllustrationsContent>
-            Data driven dashboard solution
-          </styles.IllustrationsContent>
-        </styles.Illustrations>
-
+        <components.Carousel />
         <styles.Form onSubmit={logIn}>
           <styles.FormCaption>Welcome Back</styles.FormCaption>
           <styles.Input type="text" placeholder="Email" />
           <styles.Input type="password" placeholder="Password" />
-          <styles.FormAction></styles.FormAction>
+          <styles.FormAction>
+            <div className="flex items-center">
+              <input type="checkbox" id="remember" />
+              <label htmlFor="remember" className="ml-2">
+                Remember me
+              </label>
+            </div>
+            <div className="cursor-pointer">Forget Password?</div>
+          </styles.FormAction>
           <styles.PrimaryBtn>Log In</styles.PrimaryBtn>
         </styles.Form>
       </styles.Login>

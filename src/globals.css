@@ -9,7 +9,21 @@
   --gradient-bg: linear-gradient(to bottom, #292e37, #0a0b0d);
   --color-btn: #b6f2cf;
   --color-bg-input: #202328;
+  --color-primary: #b6f2cf;
   --color-secondary: #1fa7fe;
+  --color-text: #ffffff;
+  --color-subtext: #cecece;
+  --color-placeholder: #817f7f;
+  --gradient-pie-chart: linear-gradient(135deg, #090a0c, #282f37);
+}
+
+*,
+*::before,
+*::after {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 html {
@@ -23,11 +37,3 @@ body {
   color: white;
   background: var(--gradient-bg);
 }
-
-.highlight {
-  stroke: inherit;
-}
-
-/* .highlight:hover {
-  stroke: inherit;
-} */
