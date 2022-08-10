@@ -46,6 +46,35 @@ function Devices() {
         <select
           name="sort"
           className="text-[#dedede] outline-none bg-[color:var(--color-bg-primary)] px-4 py-2 rounded-lg mr-6 cursor-pointer flex-1 neumorphism-outer"
+          onChange={(e) => {
+            const jwt = window.localStorage.getItem("jwt");
+            const config = {
+              method: "get",
+              url: "https://dev2.powerstrip.in/device/admin/get-all",
+              headers: {
+                userAuthToken: jwt,
+              },
+            };
+
+            axios(config)
+              .then(function (response) {
+                console.log(response.data);
+                const allDevices = response.data;
+                if (!e.target.value) {
+                  setDevices(allDevices);
+                } else {
+                  setDevices(
+                    allDevices.filter(
+                      (device) =>
+                        +device["charging_vehicle_type"] === +e.target.value
+                    )
+                  );
+                }
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          }}
         >
           <option value="">Vehicle Type</option>
           <option value="2">2 Wheeler</option>
@@ -54,6 +83,34 @@ function Devices() {
         <select
           name="sort"
           className="text-[#dedede] outline-none bg-[color:var(--color-bg-primary)] px-4 py-2 rounded-lg mr-8 cursor-pointer flex-1 neumorphism-outer"
+          onChange={(e) => {
+            const jwt = window.localStorage.getItem("jwt");
+            const config = {
+              method: "get",
+              url: "https://dev2.powerstrip.in/device/admin/get-all",
+              headers: {
+                userAuthToken: jwt,
+              },
+            };
+
+            axios(config)
+              .then(function (response) {
+                console.log(response.data);
+                const allDevices = response.data;
+                if (!e.target.value) {
+                  setDevices(allDevices);
+                } else {
+                  setDevices(
+                    allDevices.filter(
+                      (device) => +device["device_type"] === +e.target.value
+                    )
+                  );
+                }
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          }}
         >
           <option value="">Device Type</option>
           {deviceType.map((type, idx) => (

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import assets from "Assets";
+import Assets from "Assets";
 
 function Carousel() {
   let slideIndex = 1;
@@ -47,13 +47,13 @@ function Carousel() {
     <div>
       <div className="relative w-[600px] mx-auto">
         <div className="slide flex flex-col items-center">
-          <assets.loginScreenAnalysis />
+          <Assets.LoginScreenAnalysis />
           <div className="mt-2 font-bold text-3xl">
             Data driven dashboard solution
           </div>
         </div>
         <div className="slide flex flex-col items-center">
-          <assets.loginScreenAccessible />
+          <Assets.LoginScreenAccessible />
           <div className="mt-2 font-bold text-3xl">
             Accessible from everywhere
           </div>

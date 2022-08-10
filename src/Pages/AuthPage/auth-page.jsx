@@ -1,14 +1,16 @@
 import React from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { Link } from "react-router-dom";
 import * as styles from "./auth-page.styles";
-import assets from "Assets";
+import Assets from "Assets";
 import components from "./components";
 
 function AuthPage({ setAuthState }) {
   const logIn = async (e) => {
     try {
       e.preventDefault();
+      console.log("hi");
       const data = {};
       data.email = e.target[0].value;
       data.password = e.target[1].value;
@@ -20,6 +22,7 @@ function AuthPage({ setAuthState }) {
       };
       const res = await axios(config);
       const userData = JSON.parse(JSON.stringify(res.data));
+      console.log(userData);
       if (userData.status === "error") {
         toast.error(userData.message);
         setAuthState(null);
@@ -35,7 +38,7 @@ function AuthPage({ setAuthState }) {
   return (
     <styles.Main>
       <styles.Logo>
-        <assets.brandLogo />
+        <Assets.BrandLogo />
       </styles.Logo>
       <styles.Login>
         <components.Carousel />

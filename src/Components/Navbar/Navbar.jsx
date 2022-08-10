@@ -1,7 +1,7 @@
 import React from "react";
 
 import * as styles from "./Navbar.styles";
-import assets from "Assets";
+import Assets from "Assets";
 
 function Navbar() {
   return (
@@ -9,13 +9,13 @@ function Navbar() {
       <styles.Search placeholder="Search" />
       <styles.IconBar>
         <styles.Icon>
-          <assets.reload />
+          <Assets.Reload />
         </styles.Icon>
         <styles.Icon>
-          <assets.notifications />
+          <Assets.Notifications />
         </styles.Icon>
         <styles.Icon>
-          <assets.settings />
+          <Assets.Settings />
         </styles.Icon>
       </styles.IconBar>
     </styles.Main>

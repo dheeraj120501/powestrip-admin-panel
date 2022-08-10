@@ -3,7 +3,7 @@ import Components from "Components";
 
 function LoadingPage() {
   return (
-    <div className="h-screen">
+    <div className="h-screen  flex items-center justify-center">
       <Components.Loader />
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
+import axios from "axios";
 
 import pages from "Pages";
 
@@ -16,10 +17,31 @@ function App() {
     const jwt = window.localStorage.getItem("jwt");
     console.log(jwt);
     if (jwt && jwt !== "undefined") {
-      setAuthState(jwt);
+      const config = {
+        method: "get",
+        url: "https://dev2.powerstrip.in/analytics/current-in-use",
+        headers: {
+          userAuthToken: jwt,
+        },
+      };
+
+      axios(config)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.status === "error") {
+            window.localStorage.removeItem("jwt");
+            setAuthState(null);
+          } else {
+            setAuthState(jwt);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     } else {
       setAuthState(null);
     }
+    console.log(authState);
   }, []);
 
   return (
