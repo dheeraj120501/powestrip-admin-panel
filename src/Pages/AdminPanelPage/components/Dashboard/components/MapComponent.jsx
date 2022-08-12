@@ -54,8 +54,9 @@ function MapComponent() {
         >
           {/* Child components, such as markers, info windows, etc. */}
           {markers &&
-            markers.map((marker) => (
+            markers.map((marker, idx) => (
               <MarkerF
+                key={idx}
                 icon={`data:image/svg+xml,${encodeURIComponent(
                   renderToStaticMarkup(<Assets.MapMarker />)
                 )}`}

@@ -7,7 +7,8 @@ import {
   VictoryChart,
   VictoryTooltip,
   VictoryScatter,
-  createContainer,
+  VictoryGroup,
+  VictoryVoronoiContainer,
 } from "victory";
 import components from "./components";
 import Components from "Components";
@@ -16,6 +17,7 @@ function Dashboard() {
   const deviceType = ["Public", "Private", "Dealer", "Personal"];
   const vehicleCat = { ALL: 5, TWO: 2, FOUR: 4 };
   const timeFilter = { W: 7, M: 30, "3M": 90 };
+  const colorScale = ["#FFB939", "#1FA7FE", "#B6F2cF", "#F2B6B6"];
 
   const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
   const graphRef = useCallback((node) => {
@@ -30,20 +32,26 @@ function Dashboard() {
   const [timeCat, setTimeCat] = useState(timeFilter.W);
   const [categoryUsageData, setCategoryUsageData] = useState(null);
   const [sectorPercent, setSectorPercent] = useState(null);
+  const [sectorPercentMax, setSectorPercentMax] = useState({
+    data: 0,
+    color: 0,
+  });
   const [timePercent, setTimePercent] = useState(null);
-
-  const VictoryZoomVoronoiContainer = createContainer("voronoi");
+  const [timePercentMax, setTimePercentMax] = useState({
+    data: 0,
+    color: 0,
+  });
 
   const fetchcategoryUsageData = async () => {
     try {
       // const data = { days: timeCat, type: wheelerType };
       const jwt = window.localStorage.getItem("jwt");
       console.log(
-        `https://dev2.powerstrip.in/analytics/category-wise-usage?days=${timeCat}&type=${wheelerType}`
+        `https://dev2.powerstrip.in/analytics/category-wise-usage?days=${timeCat}&type=5`
       );
       const config = {
         method: "get",
-        url: `https://dev2.powerstrip.in/analytics/category-wise-usage?days=${timeCat}&type=${wheelerType}`,
+        url: `https://dev2.powerstrip.in/analytics/category-wise-usage?days=${timeCat}&type=5`,
         headers: {
           "Content-type": "application/json",
           userAuthToken: jwt,
@@ -53,16 +61,13 @@ function Dashboard() {
       const response = await axios(config);
       console.log(response.data);
       setCategoryUsageData(response.data);
-      console.log(
-        [
-          { x: "", y: 0 },
-          ...response.data["2-wheeler"]
-            .filter((cat) => cat["name"] && cat["total_hours"])
-            .map((cat) => {
-              return { x: cat["name"], y: +cat["total_hours"] };
-            }),
-        ].length
-      );
+      console.log([
+        ...response.data["4-wheeler"]
+          .filter((cat) => cat["name"] && cat["total_hours"])
+          .map((cat) => {
+            return { x: cat["name"], y: +cat["total_hours"] };
+          }),
+      ]);
     } catch (err) {
       console.log(err);
     }
@@ -100,6 +105,17 @@ function Dashboard() {
       .then((response) => {
         console.log(response.data);
         setTimeSlotData(response.data);
+        const sum = response.data.reduce((acc, slot) => +acc + +slot["cnt"], 0);
+        let max = -Infinity;
+        let idx = -1;
+        response.data.forEach((e, i) => {
+          const curr = ((+e["cnt"] * 100) / sum).toFixed(1);
+          if (curr > max) {
+            idx = i;
+            max = curr;
+          }
+        });
+        setTimePercentMax({ data: max, color: idx });
       })
       .catch(function (error) {
         console.log(error);
@@ -117,6 +133,20 @@ function Dashboard() {
       .then((response) => {
         console.log(response.data);
         setSectorData(response.data);
+        const sum = response.data.reduce(
+          (acc, sector) => +acc + +sector["device_count"],
+          0
+        );
+        let max = -Infinity;
+        let idx = -1;
+        response.data.forEach((e, i) => {
+          const curr = ((+e["device_count"] * 100) / sum).toFixed(1);
+          if (curr > max) {
+            idx = i;
+            max = curr;
+          }
+        });
+        setSectorPercentMax({ data: max, color: idx });
       })
       .catch(function (error) {
         console.log(error);
@@ -198,14 +228,48 @@ function Dashboard() {
                     x: slot["slot"],
                     y: slot["cnt"],
                   }))}
-                  colorScale={["#FFB939", "var(--color-secondary)", "#AAF9CB"]}
+                  colorScale={colorScale}
                 />
-                <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-24 h-24  flex justify-center items-center rounded-full border-8 border-[color:#2C2F33]">
-                  {timePercent && `${timePercent}%`}
+                <div
+                  className={`absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-24 h-24  flex justify-center items-center rounded-full border-8 border-[color:#2C2F33] text-[${
+                    timePercent
+                      ? colorScale[timePercent.color]
+                      : colorScale[timePercentMax.color]
+                  }]`}
+                >
+                  {timePercent
+                    ? `${timePercent.data}%`
+                    : `${timePercentMax.data}%`}
                 </div>
               </div>
               <div className="text-sm font-base">
-                <div
+                {timeSlotData.map((s, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center mb-3"
+                    onMouseEnter={() => {
+                      setTimePercent({
+                        data: (
+                          (+timeSlotData[idx]["cnt"] * 100) /
+                          timeSlotData.reduce(
+                            (acc, slot) => +acc + +slot["cnt"],
+                            0
+                          )
+                        ).toFixed(1),
+                        color: idx,
+                      });
+                    }}
+                    onMouseLeave={() => {
+                      setTimePercent(null);
+                    }}
+                  >
+                    <div
+                      className={`w-4 h-4 bg-[${colorScale[idx]}] mr-4`}
+                    ></div>{" "}
+                    <span className="font-light">{timeSlotData[idx].slot}</span>
+                  </div>
+                ))}
+                {/* <div
                   className="flex items-center mb-3"
                   onMouseEnter={() => {
                     setTimePercent(
@@ -264,7 +328,7 @@ function Dashboard() {
                 >
                   <div className="w-4 h-4 bg-[#AAF9CB] mr-4"></div>{" "}
                   <span className="font-light">{timeSlotData[2].slot}</span>
-                </div>
+                </div> */}
               </div>
             </div>
           )}
@@ -281,34 +345,70 @@ function Dashboard() {
                   width={105}
                   padding={0}
                   labels={({ _ }) => ""}
-                  data={sectorData.map((sector) => ({
-                    x: deviceType[sector["device_type"]],
-                    y: sector["device_count"],
-                  }))}
-                  colorScale={[
-                    "#FFB939",
-                    "var(--color-secondary)",
-                    "#B6F2CF",
-                    "#f2b6b6",
-                  ]}
+                  data={sectorData
+                    .filter((sector) => sector["device_type"] !== null)
+                    .map((sector) => ({
+                      x: deviceType[sector["device_type"]],
+                      y: sector["device_count"],
+                    }))}
+                  colorScale={colorScale}
                 />
-                <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-24 h-24  flex justify-center items-center rounded-full border-8 border-[color:#2C2F33]">
-                  {sectorPercent && `${sectorPercent}%`}
+                <div
+                  className={`absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-24 h-24  flex justify-center items-center rounded-full border-8 border-[color:#2C2F33] text-[${
+                    sectorPercent
+                      ? colorScale[sectorPercent.color]
+                      : colorScale[sectorPercentMax.color]
+                  }]`}
+                >
+                  {sectorPercent
+                    ? `${sectorPercent.data}%`
+                    : `${sectorPercentMax.data}%`}
                 </div>
               </div>
               <div className="text-sm font-base">
-                <div
+                {sectorData
+                  .filter((sector) => sector["device_type"] !== null)
+                  .map((sec, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center mb-3"
+                      onMouseEnter={() => {
+                        setSectorPercent({
+                          data: (
+                            (+sectorData[idx]["device_count"] * 100) /
+                            sectorData.reduce(
+                              (acc, sector) => +acc + +sector["device_count"],
+                              0
+                            )
+                          ).toFixed(1),
+                          color: idx,
+                        });
+                      }}
+                      onMouseLeave={() => {
+                        setSectorPercent(null);
+                      }}
+                    >
+                      <div
+                        className={`w-4 h-4 bg-[${colorScale[idx]}] mr-4`}
+                      ></div>
+                      <span className="font-light">
+                        {deviceType[sec["device_type"]]}
+                      </span>
+                    </div>
+                  ))}
+                {/* <div
                   className="flex items-center mb-3"
                   onMouseEnter={() => {
-                    setSectorPercent(
-                      (
+                    setSectorPercent({
+                      data: (
                         (+sectorData[0]["device_count"] * 100) /
                         sectorData.reduce(
                           (acc, sector) => +acc + +sector["device_count"],
                           0
                         )
-                      ).toFixed(1)
-                    );
+                      ).toFixed(1),
+                      color: 0,
+                    });
                   }}
                   onMouseLeave={() => {
                     setSectorPercent(null);
@@ -320,15 +420,16 @@ function Dashboard() {
                 <div
                   className="flex items-center mb-3"
                   onMouseEnter={() => {
-                    setSectorPercent(
-                      (
+                    setSectorPercent({
+                      data: (
                         (+sectorData[1]["device_count"] * 100) /
                         sectorData.reduce(
                           (acc, sector) => +acc + +sector["device_count"],
                           0
                         )
-                      ).toFixed(1)
-                    );
+                      ).toFixed(1),
+                      color: 1,
+                    });
                   }}
                   onMouseLeave={() => {
                     setSectorPercent(null);
@@ -340,15 +441,16 @@ function Dashboard() {
                 <div
                   className="flex items-center mb-3"
                   onMouseEnter={() => {
-                    setSectorPercent(
-                      (
+                    setSectorPercent({
+                      data: (
                         (+sectorData[2]["device_count"] * 100) /
                         sectorData.reduce(
                           (acc, sector) => +acc + +sector["device_count"],
                           0
                         )
-                      ).toFixed(1)
-                    );
+                      ).toFixed(1),
+                      color: 2,
+                    });
                   }}
                   onMouseLeave={() => {
                     setSectorPercent(null);
@@ -360,15 +462,16 @@ function Dashboard() {
                 <div
                   className="flex items-center mb-3"
                   onMouseEnter={() => {
-                    setSectorPercent(
-                      (
+                    setSectorPercent({
+                      data: (
                         (+sectorData[3]["device_count"] * 100) /
                         sectorData.reduce(
                           (acc, sector) => +acc + +sector["device_count"],
                           0
                         )
-                      ).toFixed(1)
-                    );
+                      ).toFixed(1),
+                      color: 3,
+                    });
                   }}
                   onMouseLeave={() => {
                     setSectorPercent(null);
@@ -376,7 +479,7 @@ function Dashboard() {
                 >
                   <div className="w-4 h-4 bg-[#f2b6b6] mr-4"></div>
                   <span className="font-light">Personal</span>
-                </div>
+                </div> */}
               </div>
             </div>
           )}
@@ -493,9 +596,8 @@ function Dashboard() {
                     padding={50}
                     height={500}
                     width={boundingRect.width}
-                    containerComponent={
-                      <VictoryZoomVoronoiContainer zoomDimension="x" />
-                    }
+                    minDomain={{ y: 0 }}
+                    containerComponent={<VictoryVoronoiContainer />}
                   >
                     <VictoryAxis
                       dependentAxis
@@ -509,10 +611,11 @@ function Dashboard() {
                           fill: "white",
                         },
                       }}
+                      crossAxis={false}
                     />
                     <VictoryAxis
                       style={{
-                        axis: { stroke: "#4D96BE", strokeWidth: "1" },
+                        axis: { stroke: "none" },
                         grid: { stroke: "none" },
                         ticks: { stroke: "none", size: 5 },
                         tickLabels: {
@@ -523,7 +626,7 @@ function Dashboard() {
                       }}
                     />
                     {(wheelerType === 5 || wheelerType === 4) && (
-                      <>
+                      <VictoryGroup>
                         <VictoryLine
                           standalone={false}
                           style={{
@@ -564,17 +667,16 @@ function Dashboard() {
                               }),
                           ]}
                         />
-                      </>
+                      </VictoryGroup>
                     )}
                     {(wheelerType === 5 || wheelerType === 2) && (
-                      <>
+                      <VictoryGroup>
                         <VictoryLine
                           standalone={false}
                           style={{
                             data: { stroke: "#9FD4B5", strokeWidth: "2" },
                           }}
                           data={[
-                            { x: "", y: "" },
                             ...categoryUsageData["2-wheeler"]
                               .filter(
                                 (cat) => cat["name"] && cat["total_hours"]
@@ -597,7 +699,6 @@ function Dashboard() {
                           labels={({ datum }) => datum.y}
                           labelComponent={<VictoryTooltip />}
                           data={[
-                            { x: "", y: "" },
                             ...categoryUsageData["2-wheeler"]
                               .filter(
                                 (cat) => cat["name"] && cat["total_hours"]
@@ -610,7 +711,7 @@ function Dashboard() {
                               }),
                           ]}
                         />
-                      </>
+                      </VictoryGroup>
                     )}
                   </VictoryChart>
                 )}
