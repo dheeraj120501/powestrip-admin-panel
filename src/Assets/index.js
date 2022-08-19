@@ -12,6 +12,7 @@ import { ReactComponent as Settings } from "./settings.svg";
 import { ReactComponent as LoginScreenAccessible } from "./login-screen-accessible.svg";
 import { ReactComponent as LoginScreenAnalysis } from "./login-screen-analysis.svg";
 import { ReactComponent as MapMarker } from "./map-marker.svg";
+import { ReactComponent as MapIcon } from "./map.svg";
 
 const Assets = {
   Reload,
@@ -28,6 +29,7 @@ const Assets = {
   LoginScreenAccessible,
   LoginScreenAnalysis,
   MapMarker,
+  MapIcon,
 };
 
 export default Assets;

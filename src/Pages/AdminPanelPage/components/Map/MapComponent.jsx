@@ -39,12 +39,12 @@ function MapComponent() {
   };
 
   return (
-    <div className="bg-[color:var(--color-bg-primary)] neumorphism-outer mb-8 rounded-lg">
+    <div className="bg-[color:var(--color-bg-primary)] neumorphism-outer mb-8 rounded-lg h-full">
       {isLoaded ? (
         <GoogleMap
           mapContainerStyle={{
             width: "100%",
-            height: "500px",
+            height: "100%",
             borderRadius: "10px",
           }}
           center={center}

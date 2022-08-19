@@ -10,7 +10,6 @@ import {
   VictoryGroup,
   VictoryVoronoiContainer,
 } from "victory";
-import components from "./components";
 import Components from "Components";
 
 function Dashboard() {
@@ -231,11 +230,12 @@ function Dashboard() {
                   colorScale={colorScale}
                 />
                 <div
-                  className={`absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-24 h-24  flex justify-center items-center rounded-full border-8 border-[color:#2C2F33] text-[${
-                    timePercent
+                  style={{
+                    color: timePercent
                       ? colorScale[timePercent.color]
-                      : colorScale[timePercentMax.color]
-                  }]`}
+                      : colorScale[timePercentMax.color],
+                  }}
+                  className={`absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-24 h-24  flex justify-center items-center rounded-full border-8 border-[color:#2C2F33]`}
                 >
                   {timePercent
                     ? `${timePercent.data}%`
@@ -264,7 +264,8 @@ function Dashboard() {
                     }}
                   >
                     <div
-                      className={`w-4 h-4 bg-[${colorScale[idx]}] mr-4`}
+                      style={{ background: colorScale[idx] }}
+                      className={`w-4 h-4 mr-4`}
                     ></div>{" "}
                     <span className="font-light">{timeSlotData[idx].slot}</span>
                   </div>
@@ -354,11 +355,12 @@ function Dashboard() {
                   colorScale={colorScale}
                 />
                 <div
-                  className={`absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-24 h-24  flex justify-center items-center rounded-full border-8 border-[color:#2C2F33] text-[${
-                    sectorPercent
+                  style={{
+                    color: sectorPercent
                       ? colorScale[sectorPercent.color]
-                      : colorScale[sectorPercentMax.color]
-                  }]`}
+                      : colorScale[sectorPercentMax.color],
+                  }}
+                  className={`absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-24 h-24  flex justify-center items-center rounded-full border-8 border-[color:#2C2F33]`}
                 >
                   {sectorPercent
                     ? `${sectorPercent.data}%`
@@ -389,7 +391,8 @@ function Dashboard() {
                       }}
                     >
                       <div
-                        className={`w-4 h-4 bg-[${colorScale[idx]}] mr-4`}
+                        style={{ background: colorScale[idx] }}
+                        className={`w-4 h-4 mr-4`}
                       ></div>
                       <span className="font-light">
                         {deviceType[sec["device_type"]]}
@@ -567,29 +570,45 @@ function Dashboard() {
               <div style={{ width: "100%", height: "100%" }} ref={graphRef}>
                 {categoryUsageData === null ? (
                   <Components.Loader />
-                ) : wheelerType === 2 &&
+                ) : wheelerType === 5 &&
                   [
-                    { x: "", y: 0 },
                     ...categoryUsageData["2-wheeler"]
                       .filter((cat) => cat["name"] && cat["total_hours"])
                       .map((cat) => {
                         return { x: cat["name"], y: +cat["total_hours"] };
                       }),
-                  ].length === 1 ? (
-                  <div className="flex justify-center items-center h-[500px]">
-                    No data for 2 wheelers
-                  </div>
-                ) : wheelerType === 4 &&
+                  ].length === 0 &&
                   [
-                    { x: "", y: 0 },
                     ...categoryUsageData["4-wheeler"]
                       .filter((cat) => cat["name"] && cat["total_hours"])
                       .map((cat) => {
                         return { x: cat["name"], y: +cat["total_hours"] };
                       }),
-                  ].length === 1 ? (
+                  ].length === 0 ? (
                   <div className="flex justify-center items-center h-[500px]">
-                    No data for 4 wheelers
+                    No data for any vehicle for last {timeCat} days
+                  </div>
+                ) : wheelerType === 2 &&
+                  [
+                    ...categoryUsageData["2-wheeler"]
+                      .filter((cat) => cat["name"] && cat["total_hours"])
+                      .map((cat) => {
+                        return { x: cat["name"], y: +cat["total_hours"] };
+                      }),
+                  ].length === 0 ? (
+                  <div className="flex justify-center items-center h-[500px]">
+                    No data for 2 wheelers for last {timeCat} days
+                  </div>
+                ) : wheelerType === 4 &&
+                  [
+                    ...categoryUsageData["4-wheeler"]
+                      .filter((cat) => cat["name"] && cat["total_hours"])
+                      .map((cat) => {
+                        return { x: cat["name"], y: +cat["total_hours"] };
+                      }),
+                  ].length === 0 ? (
+                  <div className="flex justify-center items-center h-[500px]">
+                    No data for 4 wheelers for last {timeCat} days
                   </div>
                 ) : (
                   <VictoryChart
@@ -720,7 +739,6 @@ function Dashboard() {
           </div>
         )}
       </div>
-      <components.MapComponent />
     </div>
   );
 }

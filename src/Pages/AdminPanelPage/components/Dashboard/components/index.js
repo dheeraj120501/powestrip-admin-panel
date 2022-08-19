@@ -1,4 +1,4 @@
-import MapComponent from "./MapComponent";
+import MapComponent from "../../Map/MapComponent";
 import CustomLabel from "./CustomLabel";
 
 const components = {

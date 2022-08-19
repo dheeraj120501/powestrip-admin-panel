@@ -99,6 +99,7 @@ export const ListView = tw.div`
     flex-col
     items-stretch
     overflow-auto
+    customScrollbar
     flex-1
 `;
 
@@ -108,8 +109,10 @@ export const ListTile = tw.div`
     items-center
     cursor-pointer
     stroke-[#dedede]
+    fill-[#dedede]
     hover:text-[color:var(--color-secondary)]
     hover:stroke-[color:var(--color-secondary)]
+    hover:fill-[color:var(--color-secondary)]
 `;
 
 export const ListTileImg = tw.div`

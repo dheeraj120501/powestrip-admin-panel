@@ -3,15 +3,18 @@ import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import * as styles from "./Sidebar.styles";
 import Assets from "Assets";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar({ setAuthState }) {
   const [isAddingDevice, setisAddingDevice] = useState(false);
   const [currentTab, setCurrentTab] = useState(0);
   const [deviceCount, setDeviceCount] = useState("");
+  const navigate = useNavigate();
 
   const logOut = () => {
     setAuthState(undefined);
     window.localStorage.removeItem("jwt");
+    navigate("/", { replace: true });
     setAuthState(null);
   };
 
@@ -26,9 +29,15 @@ function Sidebar({ setAuthState }) {
       name: "Devices",
       link: "/devices",
     },
+    {
+      icon: Assets.MapIcon,
+      name: "Maps",
+      link: "/map",
+    },
     // {
     //   icon: Assets.SectorsIcon,
     //   name: "Sectors",
+    //   link: "/",
     // },
     // {
     //   icon: Assets.UserIcon,
@@ -93,22 +102,25 @@ function Sidebar({ setAuthState }) {
       )}
       <styles.ListView>
         {navLinks.map((navLink, idx) => (
-          <styles.ListTile
-            key={idx}
+          <Link
+            to={navLink["link"]}
             className={`${
               currentTab === idx
-                ? "stroke-[color:var(--color-secondary)] text-[color:var(--color-secondary)]"
-                : ""
+                ? "stroke-[color:var(--color-secondary)] fill-[color:var(--color-secondary)] text-[color:var(--color-secondary)]"
+                : "stroke-[#dedede] fill-[#dedede] text-[#dedede]"
             }`}
-            onClick={() => setCurrentTab(idx)}
           >
-            <Link to={navLink["link"]} className="flex">
+            <styles.ListTile
+              key={idx}
+              onClick={() => setCurrentTab(idx)}
+              className="stroke-inherit fill-inherit"
+            >
               <styles.ListTileImg>
-                <navLink.icon className="highlight" />
+                <navLink.icon />
               </styles.ListTileImg>
               <styles.ListTileContent>{navLink["name"]}</styles.ListTileContent>
-            </Link>
-          </styles.ListTile>
+            </styles.ListTile>
+          </Link>
         ))}
       </styles.ListView>
       <styles.Card>

@@ -24,6 +24,7 @@ function AdminPanelPage({ setAuthState }) {
               path="/add-device"
               element={<components.AddDevice />}
             ></Route>
+            <Route path="/map" element={<components.Map />}></Route>
           </Routes>
         </styles.MainContent>
       </styles.Main>
